@@ -9,6 +9,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Extrair o projeto do ZIP
         run: unzip -q EasyWebmail-Android-Project-fixed.zip -d projeto
+      - name: Criar gradle.properties
+        run: |
+          printf 'android.useAndroidX=true\norg.gradle.jvmargs=-Xmx3g -Dfile.encoding=UTF-8\nkotlin.code.style=official\n' > projeto/gradle.properties
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -18,7 +21,7 @@ jobs:
           gradle-version: 8.11.1
       - name: Compilar APK
         working-directory: projeto
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: EasyWebmail-debug
