@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Extrair o projeto do ZIP
+        run: unzip -q EasyWebmail-Android-Project-fixed.zip -d projeto
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -14,8 +16,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.11.1
-      - run: gradle assembleDebug --stacktrace
+      - name: Compilar APK
+        working-directory: projeto
+        run: gradle assembleDebug --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: EasyWebmail-debug
-          path: app/build/outputs/apk/debug/*.apk
+          path: projeto/app/build/outputs/apk/debug/*.apk
